@@ -10,6 +10,7 @@ import { WeekCalendar, type CalendarBlock } from '../components/WeekCalendar';
 import { api, useEvents } from '../data/api';
 import type { Friend } from '../data/types';
 import { friendBusy } from '../lib/availability';
+import { eventMatches } from '../lib/search';
 import { addDays, mondayOf, shortClock } from '../lib/time';
 
 /** "On campus until 6 PM · free now" — derived from today's schedule and the fixed "now". */
@@ -28,8 +29,7 @@ export function Friends() {
   const today = api.today();
 
   const friendEvents = allEvents.filter((e) => e.date >= today);
-  const names = (ids: string[]) => ids.map((id) => api.person(id)?.name ?? '').join(' ');
-  const events = friendEvents.filter((e) => !q || `${e.title} ${e.place} ${names(e.attendeeIds)}`.toLowerCase().includes(q));
+  const events = friendEvents.filter((e) => eventMatches(e, friendsQuery));
   const onCampus = api.friends().filter((f) => f.onCampusToday && (!q || f.name.toLowerCase().includes(q)));
 
   const monday = mondayOf(today);

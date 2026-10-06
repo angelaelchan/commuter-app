@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect, useMemo } from 'react';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import type { Place } from '../data/types';
 import { iconSvg } from './Icon';
 
@@ -31,16 +31,27 @@ function Fit({ places, center }: { places: Place[]; center?: Place }) {
   return null;
 }
 
+/** Pan to a place picked from search. */
+function FocusOn({ place }: { place?: Place }) {
+  const map = useMap();
+  useEffect(() => {
+    if (place) map.setView([place.lat, place.lng], Math.max(map.getZoom(), 16));
+  }, [map, place]);
+  return null;
+}
+
 interface Props {
   places: Place[];
   selectedId?: string;
   onSelect?: (id: string) => void;
   /** Small, fixed preview centered on the selected place (Confirm step). */
   preview?: boolean;
+  /** Place to pan to (from search). */
+  focusId?: string;
   fallbackCenter: [number, number];
 }
 
-export function PlaceMap({ places, selectedId, onSelect, preview, fallbackCenter }: Props) {
+export function PlaceMap({ places, selectedId, onSelect, preview, focusId, fallbackCenter }: Props) {
   const selected = places.find((p) => p.id === selectedId);
   const icons = useMemo(() => new Map(places.map((p) => [p.id, pinIcon(p, p.id === selectedId)])), [places, selectedId]);
 
@@ -49,7 +60,7 @@ export function PlaceMap({ places, selectedId, onSelect, preview, fallbackCenter
       className={`place-map ${preview ? 'place-map--preview' : ''}`}
       center={fallbackCenter}
       zoom={16}
-      zoomControl={!preview}
+      zoomControl={false}
       dragging={!preview}
       scrollWheelZoom={!preview}
       doubleClickZoom={!preview}
@@ -59,7 +70,9 @@ export function PlaceMap({ places, selectedId, onSelect, preview, fallbackCenter
       attributionControl
     >
       <TileLayer url={TILES} attribution={ATTRIBUTION} maxZoom={19} />
+      {!preview && <ZoomControl position="bottomleft" />}
       <Fit places={places} center={preview ? selected : undefined} />
+      {!preview && <FocusOn place={places.find((p) => p.id === focusId)} />}
       {places.map((p) => (
         <Marker
           key={p.id}

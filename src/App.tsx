@@ -1,4 +1,5 @@
 import { AppStateProvider, useApp } from './app/state';
+import { PhoneFrame } from './components/PhoneFrame';
 import { ClassPage } from './screens/ClassPage';
 import { Classes } from './screens/Classes';
 import { Friends } from './screens/Friends';
@@ -24,7 +25,9 @@ function Router() {
 export default function App() {
   return (
     <AppStateProvider>
-      <Router />
+      <PhoneFrame>
+        <Router />
+      </PhoneFrame>
     </AppStateProvider>
   );
 }

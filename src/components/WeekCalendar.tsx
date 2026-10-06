@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { ISODate, Minutes } from '../data/types';
 import { sameSlot, type Interval, type Slot } from '../lib/availability';
-import { clock, DAY_SHORT, hourLabel, longDate, rangeCompact, weekday } from '../lib/time';
+import { clock, DAY_SHORT, hourLabel, longDate, numericDate, rangeCompact, weekday } from '../lib/time';
 
 export interface CalendarBlock {
   id: string;
@@ -54,10 +54,12 @@ export function WeekCalendar({ columns, today, blocks, slots = [], selectedSlot,
         {columns.map((date) => (
           <span
             key={date}
-            className={`week-calendar__day clickables-xs ${date === today ? 'week-calendar__day--today' : ''} ${disabledDates.includes(date) ? 'week-calendar__day--disabled' : ''}`}
+            className={`week-calendar__day ${date === today ? 'week-calendar__day--today' : ''} ${disabledDates.includes(date) ? 'week-calendar__day--disabled' : ''}`}
             aria-current={date === today ? 'date' : undefined}
+            aria-label={longDate(date)}
           >
-            {DAY_SHORT[weekday(date)]}
+            <span className="clickables-xs">{DAY_SHORT[weekday(date)]}</span>
+            <span className="specials-caption">{numericDate(date)}</span>
           </span>
         ))}
       </div>

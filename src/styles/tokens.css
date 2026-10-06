@@ -5,10 +5,18 @@
 :root {
   /* ---- Color styles (5) ---- */
   --color-primary-background: #ffffff;
-  --color-secondary-background: #f7dbd0;
+  --color-secondary-background: #fededf;
   --color-primary-accent: #50252c;
   --color-primary-text: #212121;
   --color-secondary-text: #404040;
+
+  /* "Gradient" style: Primary Background → Secondary Background (page and nav surfaces) */
+  --gradient-surface: linear-gradient(to bottom, var(--color-primary-background), var(--color-secondary-background));
+
+  /* Header band: illustration under a 63% black scrim, white text on top */
+  --image-header: url('../assets/images/header.jpg');
+  --color-scrim: rgb(0 0 0 / 0.63);
+  --color-on-scrim-muted: color-mix(in srgb, var(--color-primary-background) 72%, transparent);
 
   /* Opacity tints — no new hues, only steps of the five colors */
   --color-accent-08: color-mix(in srgb, var(--color-primary-accent) 8%, transparent);
@@ -42,6 +50,14 @@
 
   /* ---- Component sizes (on the same grid) ---- */
   --size-device: 402px;
+  --size-device-height: 874px;
+  --size-bezel: 12px;
+  --size-island-width: 120px;
+  --size-island-height: 32px;
+  --radius-device: 56px;
+  --radius-device-screen: 44px;
+  /* Visible app height: the viewport on phones, the device screen in the desktop frame */
+  --app-height: 100svh;
   --size-header: 160px;
   --size-header-tall: 204px;
   --size-nav: 108px;
@@ -66,13 +82,14 @@
 
   /* ---- Radius (read from the frames) ---- */
   --radius-chip: 5px;
-  --radius-card: 6px;
+  --radius-card: 8px;
   --radius-button: 10px;
   --radius-band: 10px;
   --radius-full: 9999px;
 
   /* ---- Elevation ---- */
   --shadow-button: 0 1px 2px var(--color-text-08);
+  --shadow-card: 0 0 2px rgb(0 0 0 / 0.2);
   --shadow-toast: 0 0 4px var(--color-text-shadow);
 }
 
@@ -101,4 +118,6 @@
   --radius-panel: 10px;
   --stroke-hairline: 1px;
   --stroke-bold: 2px;
+  /* One stroke width for every bottom-nav icon */
+  --stroke-nav-icon: 2.5px;
 }

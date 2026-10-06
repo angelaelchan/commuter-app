@@ -2,6 +2,7 @@ import bell from '../assets/icons/bell.svg?raw';
 import calendar from '../assets/icons/calendar.svg?raw';
 import check from '../assets/icons/check.svg?raw';
 import chevronRight from '../assets/icons/chevron-right.svg?raw';
+import edit from '../assets/icons/edit.svg?raw';
 import graduationCap from '../assets/icons/graduation-cap.svg?raw';
 import home from '../assets/icons/home.svg?raw';
 import list from '../assets/icons/list.svg?raw';
@@ -11,8 +12,8 @@ import search from '../assets/icons/search.svg?raw';
 import users from '../assets/icons/users.svg?raw';
 import x from '../assets/icons/x.svg?raw';
 
-/** Icons exported from the Figma file (search and map-pin match the same Feather set). */
-const ICONS = { bell, calendar, check, chevronRight, graduationCap, home, list, mapPin, profile, search, users, x };
+/** Icons exported from the Figma file (search, map-pin and edit match the same Feather set). */
+const ICONS = { bell, calendar, check, chevronRight, edit, graduationCap, home, list, mapPin, profile, search, users, x };
 
 export type IconName = keyof typeof ICONS;
 

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { api } from '../data/api';
 import type { Quarter } from '../data/types';
-import type { DateChoice, Slot } from '../lib/availability';
+import type { CustomRange, DateChoice, Slot } from '../lib/availability';
 
 export type Route =
   | { name: 'home' }
@@ -18,6 +18,8 @@ export type ViewMode = 'list' | 'calendar';
 export interface HangoutDraft {
   name: string;
   dateChoice: DateChoice;
+  /** Set when dateChoice is 'custom'. */
+  customRange?: CustomRange;
   duration: number;
   campus: 'on' | 'off';
   invited: string[];
@@ -25,6 +27,10 @@ export interface HangoutDraft {
   inviteHistory: string[][];
   slot?: Slot;
   placeId?: string;
+  /** True after tapping an edit icon on Confirm: steps offer "Save changes" back to Confirm. */
+  editing: boolean;
+  /** Why the picked time was cleared (shown on the Time step). */
+  timeNotice?: string;
 }
 
 /** Defaults match the chips pre-selected in the Hangout - Details wireframe. */
@@ -35,6 +41,7 @@ const newDraft = (invited: string[] = []): HangoutDraft => ({
   campus: 'on',
   invited,
   inviteHistory: [],
+  editing: false,
 });
 
 export interface Toast {
@@ -46,6 +53,8 @@ interface AppState {
   route: Route;
   navigate: (route: Route) => void;
 
+  homeQuery: string;
+  setHomeQuery: (q: string) => void;
   classesView: ViewMode;
   setClassesView: (v: ViewMode) => void;
   quarter: Quarter;
@@ -69,6 +78,7 @@ const Ctx = createContext<AppState | null>(null);
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [route, setRoute] = useState<Route>({ name: 'home' });
+  const [homeQuery, setHomeQuery] = useState('');
   const [classesView, setClassesView] = useState<ViewMode>('list');
   const [quarter, setQuarter] = useState<Quarter>(api.currentQuarter());
   const [classesQuery, setClassesQuery] = useState('');
@@ -79,7 +89,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const navigate = useCallback((next: Route) => {
     setRoute(next);
-    window.scrollTo(0, 0);
+    // Inside the desktop phone frame the screen scrolls, not the window.
+    const root = document.querySelector('[data-scroll-root]');
+    if (root) root.scrollTop = 0;
+    else window.scrollTo(0, 0);
   }, []);
 
   const updateDraft = useCallback((patch: Partial<HangoutDraft>) => setDraft((d) => ({ ...d, ...patch })), []);
@@ -95,12 +108,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AppState>(
     () => ({
       route, navigate,
+      homeQuery, setHomeQuery,
       classesView, setClassesView, quarter, setQuarter, classesQuery, setClassesQuery,
       friendsView, setFriendsView, friendsQuery, setFriendsQuery,
       draft, updateDraft, startHangout,
       toast, setToast,
     }),
-    [route, navigate, classesView, quarter, classesQuery, friendsView, friendsQuery, draft, updateDraft, startHangout, toast],
+    [route, navigate, homeQuery, classesView, quarter, classesQuery, friendsView, friendsQuery, draft, updateDraft, startHangout, toast],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

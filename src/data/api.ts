@@ -42,6 +42,13 @@ export const api = {
 
   forumPosts: (courseId: string): ForumPost[] =>
     mock.forumPosts.filter((p) => p.courseId === courseId).sort((a, b) => a.minutesAgo - b.minutesAgo),
+  /** Unanswered discussions in the current quarter's classes, newest first. */
+  discussionsToReview: (): ForumPost[] => {
+    const mine = new Set(mock.courses.filter((c) => c.quarter === mock.CURRENT_QUARTER).map((c) => c.id));
+    return mock.forumPosts
+      .filter((p) => mine.has(p.courseId) && !p.answered)
+      .sort((a, b) => a.minutesAgo - b.minutesAgo);
+  },
   chats: (courseId: string): ChatThread[] =>
     mock.chats.filter((c) => c.courseId === courseId).sort((a, b) => b.time - a.time),
   unreadChats: (courseId: string) => mock.chats.filter((c) => c.courseId === courseId && c.unread).length,

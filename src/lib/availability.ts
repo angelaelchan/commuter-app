@@ -25,16 +25,30 @@ export interface Slot {
 export const WINDOW: Interval = { start: 9 * 60, end: 17 * 60 };
 const STEP = 30;
 
-export type DateChoice = 'today' | 'this-week' | 'next-week';
+export type DateChoice = 'today' | 'this-week' | 'next-week' | 'custom';
+
+/** A specific day or window picked in the date picker (inclusive, at most 7 days). */
+export interface CustomRange {
+  start: ISODate;
+  end: ISODate;
+}
+
+/** Longest window the date picker allows: one week fits the calendar. */
+export const MAX_RANGE_DAYS = 7;
 
 export interface DateRange {
   /** Days that can hold a hangout: in the chosen range and not before today. */
   dates: ISODate[];
-  /** Day columns to draw: the whole Monday–Sunday week. */
+  /** Day columns to draw: the whole Monday–Sunday week, or the picked days. */
   columns: ISODate[];
 }
 
-export function dateRange(choice: DateChoice, today = api.today()): DateRange {
+export function dateRange(choice: DateChoice, custom?: CustomRange, today = api.today()): DateRange {
+  if (choice === 'custom' && custom) {
+    const days: ISODate[] = [];
+    for (let d = custom.start; d <= custom.end && days.length < MAX_RANGE_DAYS; d = addDays(d, 1)) days.push(d);
+    return { dates: days.filter((d) => d >= today), columns: days };
+  }
   const week = (monday: ISODate) => Array.from({ length: 7 }, (_, i) => addDays(monday, i));
   const thisWeek = week(mondayOf(today));
   if (choice === 'today') return { dates: [today], columns: thisWeek };
@@ -83,21 +97,39 @@ function sharedCells(friendId: string, dates: ISODate[]) {
 }
 
 export interface Overlap {
+  /** Shared free minutes, counting only stretches long enough for the hangout. */
   minutes: number;
-  /** Dates on which the friend and student share free time. */
+  /** Dates with at least one shared stretch of the full duration. */
   days: ISODate[];
-  /** True if the friend has free time, but only while the student is busy. */
-  freeOnlyWhenBusy: boolean;
+  /** Why there is no usable overlap (when minutes is 0). */
+  reason?: 'never-free' | 'only-when-busy' | 'too-short';
 }
 
-export function overlapWith(friendId: string, dates: ISODate[]): Overlap {
+/**
+ * Shared free time between the student and a friend. Only unbroken stretches
+ * at least `duration` long count, so every friend listed with overlap can be
+ * scheduled in the Time step.
+ */
+export function overlapWith(friendId: string, dates: ISODate[], duration: Minutes): Overlap {
   const cells = sharedCells(friendId, dates);
-  const shared = cells.filter((c) => c.bothFree);
-  return {
-    minutes: shared.length * STEP,
-    days: [...new Set(shared.map((c) => c.date))],
-    freeOnlyWhenBusy: shared.length === 0 && cells.some((c) => c.theyAreFree),
-  };
+  let minutes = 0;
+  const days = new Set<ISODate>();
+  let run = 0;
+  cells.forEach((c, i) => {
+    run = c.bothFree ? run + STEP : 0;
+    const next = cells[i + 1];
+    const runEnds = !next || next.date !== c.date || !next.bothFree || next.start !== c.start + STEP;
+    if (runEnds && run >= duration) {
+      minutes += run;
+      days.add(c.date);
+    }
+    if (runEnds) run = 0;
+  });
+  const reason = minutes > 0 ? undefined
+    : cells.some((c) => c.bothFree) ? 'too-short'
+    : cells.some((c) => c.theyAreFree) ? 'only-when-busy'
+    : 'never-free';
+  return { minutes, days: [...days], reason };
 }
 
 /**
@@ -105,8 +137,10 @@ export function overlapWith(friendId: string, dates: ISODate[]): Overlap {
  * every 30 minutes; each day keeps the best non-overlapping slots, and only
  * slots where at least one friend can join are returned.
  */
-export function findSlots(dates: ISODate[], duration: Minutes, friendIds: string[]): Slot[] {
+export function findSlots(dates: ISODate[], duration: Minutes, friendIds: string[], pinned?: Slot): Slot[] {
   const total = friendIds.length + 1;
+  // A slot the student already picked stays on the calendar while it still works.
+  const keep = pinned && slotWorks(pinned, dates, duration, friendIds) ? { ...pinned, free: 1 + friendsFreeAt(pinned, friendIds).length, total } : undefined;
   return dates.flatMap((date) => {
     const mine = studentBusy(date);
     const candidates: Slot[] = [];
@@ -116,7 +150,7 @@ export function findSlots(dates: ISODate[], duration: Minutes, friendIds: string
       const free = 1 + friendIds.filter((id) => isFree(friendBusy(id, date), start, end)).length;
       if (free >= 2) candidates.push({ date, start, end, free, total });
     }
-    const chosen: Slot[] = [];
+    const chosen: Slot[] = keep && keep.date === date ? [keep] : [];
     [...candidates]
       .sort((a, b) => b.free - a.free || a.start - b.start)
       .forEach((c) => {
@@ -124,6 +158,26 @@ export function findSlots(dates: ISODate[], duration: Minutes, friendIds: string
       });
     return chosen.sort((a, b) => a.start - b.start);
   });
+}
+
+/** Invited friends who are free for the whole slot. */
+export function friendsFreeAt(slot: Slot, friendIds: string[]) {
+  return friendIds.filter((id) => isFree(friendBusy(id, slot.date), slot.start, slot.end));
+}
+
+/**
+ * Whether a picked slot still works after edits: it is in the date range,
+ * matches the duration, the student is free, and at least one friend can come.
+ */
+export function slotWorks(slot: Slot, dates: ISODate[], duration: Minutes, friendIds: string[]) {
+  return (
+    dates.includes(slot.date) &&
+    slot.end - slot.start === duration &&
+    slot.start >= firstStart(slot.date) &&
+    slot.end <= WINDOW.end &&
+    isFree(studentBusy(slot.date), slot.start, slot.end) &&
+    friendsFreeAt(slot, friendIds).length > 0
+  );
 }
 
 /** The earliest slot with the most people free. */

@@ -38,9 +38,9 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .screen {
   position: relative;
   max-width: var(--size-device);
-  min-height: 100svh;
+  min-height: var(--app-height);
   margin: 0 auto;
-  background: var(--color-primary-background);
+  background: var(--color-primary-background) var(--gradient-surface);
   padding-bottom: var(--size-nav);
 }
 
@@ -50,9 +50,18 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   justify-content: flex-end;
   min-height: var(--size-header);
   padding: var(--space-48) var(--space-24) var(--space-24);
-  background: var(--color-secondary-background);
+  background:
+    linear-gradient(var(--color-scrim), var(--color-scrim)),
+    var(--image-header) center / cover,
+    var(--color-primary-accent);
+  color: var(--color-primary-background);
   border-radius: 0 0 var(--radius-band) var(--radius-band);
 }
+.header-band .back { color: var(--color-primary-background); }
+.header-band .tabs__tab { color: var(--color-on-scrim-muted); }
+.header-band .tabs__tab--active { color: var(--color-primary-background); }
+.header-band .view-toggle__button { color: var(--color-primary-background); }
+.header-band .view-toggle__button--active { background: var(--color-primary-background); color: var(--color-primary-accent); }
 .header-band--tall { min-height: var(--size-header-tall); }
 
 .header-row {
@@ -66,6 +75,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .screen__bleed { padding: 0; }
 
 .stack { display: flex; flex-direction: column; }
+.stack--4 { gap: var(--space-4); }
 .stack--8 { gap: var(--space-8); }
 .stack--12 { gap: var(--space-12); }
 .stack--16 { gap: var(--space-16); }
@@ -111,7 +121,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   align-items: flex-start;
   justify-content: space-between;
   padding: var(--space-16) var(--space-32) var(--space-24);
-  background: var(--color-secondary-background);
+  background: var(--color-primary-background) var(--gradient-surface);
   border-radius: var(--radius-band) var(--radius-band) 0 0;
 }
 .bottom-nav__item {
@@ -120,10 +130,12 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   align-items: center;
   gap: var(--space-4);
   min-width: var(--size-avatar-l);
-  color: var(--color-secondary-text);
+  color: var(--color-primary-text);
 }
 .bottom-nav__item--active { color: var(--color-primary-accent); }
 .bottom-nav__icon { display: flex; align-items: center; justify-content: center; height: var(--size-icon-l); }
+/* Same on-screen stroke for all nav icons, whatever each SVG's own scale is. */
+.bottom-nav__icon svg * { stroke-width: var(--stroke-nav-icon); vector-effect: non-scaling-stroke; }
 
 /* ---------------------------------------------------------------- Buttons */
 
@@ -165,12 +177,14 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   height: var(--size-chip);
   padding: 0 var(--space-20);
   border-radius: var(--radius-chip);
-  background: var(--color-secondary-background);
+  background: var(--color-primary-background);
+  box-shadow: var(--shadow-card);
   color: var(--color-primary-text);
   white-space: nowrap;
 }
 .chip--selected { background: var(--color-primary-accent); color: var(--color-primary-background); }
-.card .chip:not(.chip--selected) { background: var(--color-primary-background); }
+.card .chip { box-shadow: none; }
+.card .chip:not(.chip--selected) { background: var(--color-secondary-background); }
 .chip--day { padding: 0; flex: 1 1 0; max-width: var(--size-icon-l); }
 .card .chip--disabled, .chip--disabled { background: var(--color-text-08); color: var(--color-secondary-text); opacity: 0.5; }
 
@@ -283,7 +297,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   background: var(--color-primary-accent);
   color: var(--color-primary-background);
 }
-.avatar--xs { width: var(--size-avatar-xs); height: var(--size-avatar-xs); box-shadow: 0 0 0 var(--stroke-hairline) var(--color-secondary-background); }
+.avatar--xs { width: var(--size-avatar-xs); height: var(--size-avatar-xs); box-shadow: 0 0 0 var(--stroke-hairline) var(--color-primary-background); }
 .avatar--s { width: var(--size-avatar-s); height: var(--size-avatar-s); }
 .avatar--m { width: var(--size-avatar-m); height: var(--size-avatar-m); }
 .avatar--l { width: var(--size-avatar-l); height: var(--size-avatar-l); }
@@ -299,7 +313,8 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   width: 100%;
   padding: var(--space-12);
   border-radius: var(--radius-card);
-  background: var(--color-secondary-background);
+  background: var(--color-primary-background);
+  box-shadow: var(--shadow-card);
   color: var(--color-primary-text);
 }
 
@@ -311,7 +326,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   flex: none;
   width: var(--size-date-tile);
   border-radius: var(--radius-chip);
-  background: var(--color-primary-background);
+  background: var(--color-secondary-background);
   color: var(--color-primary-text);
 }
 .tile--course { width: var(--size-course-tile); height: var(--size-course-tile); }
@@ -374,7 +389,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   gap: var(--space-8);
   padding: var(--space-12);
   border-radius: var(--radius-card);
-  background: var(--color-secondary-background);
+  background: var(--color-primary-background);
   box-shadow: var(--shadow-toast);
 }
 .toast__close { align-self: flex-end; display: flex; color: var(--color-primary-text); }
@@ -383,9 +398,9 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 
 .week-calendar {
   padding: var(--space-8);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   background: var(--color-primary-background);
-  box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-accent-24);
+  box-shadow: var(--shadow-card);
 }
 .week-calendar__days,
 .week-calendar__grid {
@@ -396,9 +411,10 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .week-calendar__days { margin-bottom: var(--space-8); }
 .week-calendar__day {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: var(--size-icon-s);
+  padding: var(--space-4) 0;
   border-radius: var(--radius-chip);
   color: var(--color-primary-text);
 }
@@ -497,11 +513,34 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   display: flex;
   flex-direction: column;
   height: max(
-    calc(100svh - var(--size-header-tall) - var(--size-nav)),
+    calc(var(--app-height) - var(--size-header-tall) - var(--size-nav)),
     calc(var(--size-header-tall) * 2)
   );
 }
+.place-step { position: relative; }
 .place-step .place-map { flex: 1; }
+
+/* Search floats over the top of the map. */
+.map-search {
+  position: absolute;
+  z-index: 900;
+  top: var(--space-12);
+  left: var(--space-12);
+  right: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.map-search .search { box-shadow: var(--shadow-card); }
+.map-search__results { display: flex; flex-direction: column; padding: var(--space-4) 0; }
+.map-search__result {
+  padding: var(--space-8) var(--space-12);
+  color: var(--color-primary-text);
+  text-align: left;
+}
+.map-search__result:hover,
+.map-search__result[aria-selected='true'] { background: var(--color-secondary-background); }
+.map-search__results .empty { padding: var(--space-8) var(--space-12); }
 
 .place-map {
   width: 100%;
@@ -559,3 +598,153 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   box-shadow: inset 0 0 0 var(--stroke-bold) var(--color-primary-accent);
   white-space: nowrap;
 }
+
+/* ------------------------------------------------- Desktop phone frame */
+
+.device-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+.device {
+  flex: none;
+  padding: var(--size-bezel);
+  border-radius: var(--radius-device);
+  background: var(--color-primary-text);
+  box-shadow: 0 var(--space-24) var(--space-48) var(--color-text-shadow);
+  transform-origin: center;
+}
+.device__screen {
+  --app-height: var(--size-device-height);
+  position: relative;
+  width: var(--size-device);
+  height: var(--size-device-height);
+  overflow: hidden;
+  border-radius: var(--radius-device-screen);
+  background: var(--color-primary-background);
+  /* Makes position: fixed children (bottom nav, toast) relative to the screen. */
+  transform: translateZ(0);
+}
+.device__scroll {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.device__scroll::-webkit-scrollbar { display: none; }
+.device__island {
+  position: absolute;
+  z-index: 2000;
+  top: var(--space-12);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--size-island-width);
+  height: var(--size-island-height);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-text);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------- Date picker sheet */
+
+.sheet-backdrop {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--color-scrim);
+}
+.sheet {
+  width: min(100%, var(--size-device));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  padding: var(--space-24) var(--space-24) var(--space-32);
+  border-radius: var(--radius-band) var(--radius-band) 0 0;
+  background: var(--color-primary-background) var(--gradient-surface);
+  box-shadow: var(--shadow-toast);
+}
+.sheet__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-12); }
+.sheet__hint { color: var(--color-secondary-text); }
+.sheet__close { display: flex; color: var(--color-primary-text); }
+.sheet__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+
+.date-picker {
+  padding: var(--space-12);
+  border-radius: var(--radius-card);
+  background: var(--color-primary-background);
+  box-shadow: var(--shadow-card);
+}
+.date-picker__month {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-12);
+}
+.date-picker__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-chip);
+  height: var(--size-chip);
+  border-radius: var(--radius-full);
+  color: var(--color-primary-accent);
+}
+.date-picker__nav:hover:not(:disabled) { background: var(--color-secondary-background); }
+.date-picker__nav:disabled { opacity: 0.3; }
+.date-picker__nav--prev .icon { transform: rotate(180deg); }
+.date-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  row-gap: var(--space-4);
+}
+.date-picker__weekday {
+  padding-bottom: var(--space-4);
+  text-align: center;
+  color: var(--color-secondary-text);
+}
+.date-picker__day {
+  height: var(--size-icon-l);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--color-primary-text);
+  text-align: center;
+}
+.date-picker__day:hover:not(:disabled) { background: var(--color-secondary-background); }
+.date-picker__day:disabled { color: var(--color-secondary-text); opacity: 0.35; }
+.date-picker__day--today { box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-primary-accent); }
+.date-picker__day--in-range { border-radius: 0; background: var(--color-secondary-background); }
+.date-picker__day--selected,
+.date-picker__day--selected:hover:not(:disabled) { background: var(--color-primary-accent); color: var(--color-primary-background); }
+.date-picker__day--range-start { border-radius: var(--radius-full) 0 0 var(--radius-full); }
+.date-picker__day--range-end { border-radius: 0 var(--radius-full) var(--radius-full) 0; }
+
+/* ------------------------------------------------------ Confirm edit icons */
+
+.confirm-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-chip);
+  height: var(--size-chip);
+  border-radius: var(--radius-full);
+  color: var(--color-primary-accent);
+}
+.icon-button:hover { background: var(--color-secondary-background); }
+
+.notice {
+  padding: var(--space-12);
+  border-radius: var(--radius-card);
+  background: var(--color-secondary-background);
+  color: var(--color-primary-text);
+}
+
+/* Course code above a discussion title on Home */
+.post__course { color: var(--color-secondary-text); }
+button.post { text-align: left; }

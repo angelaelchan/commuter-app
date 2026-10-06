@@ -3,9 +3,10 @@ import { Avatar } from '../components/Avatar';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { Empty, inactive, Screen } from '../components/Screen';
+import { PostCard } from '../components/PostCard';
 import { Tabs } from '../components/Tabs';
 import { api } from '../data/api';
-import { ago, clock } from '../lib/time';
+import { clock } from '../lib/time';
 
 export function ClassPage({ courseId, tab }: { courseId: string; tab: 'forum' | 'chat' }) {
   const { navigate } = useApp();
@@ -52,29 +53,7 @@ export function ClassPage({ courseId, tab }: { courseId: string; tab: 'forum' | 
 function Forum({ courseId }: { courseId: string }) {
   const posts = api.forumPosts(courseId);
   if (!posts.length) return <Empty>No discussions yet.</Empty>;
-  return posts.map((p) => {
-    const author = api.person(p.authorId)?.name ?? '';
-    return (
-      <article key={p.id} className="card post" onClick={inactive}>
-        <div className="post__meta">
-          <span className="post__author">
-            <Avatar name={author} size="s" />
-            <span className="specials-label">
-              {author} · {ago(p.minutesAgo)}
-            </span>
-          </span>
-          <span className="tag specials-label">{p.tag}</span>
-        </div>
-        <div className="post__text">
-          <h3 className="title-s">{p.title}</h3>
-          <p className="body-xs post__preview">{p.preview}</p>
-        </div>
-        <p className="specials-label">
-          {p.replies} {p.replies === 1 ? 'reply' : 'replies'} · {p.answered ? 'Answered' : 'Unanswered'}
-        </p>
-      </article>
-    );
-  });
+  return posts.map((p) => <PostCard key={p.id} post={p} />);
 }
 
 function Chats({ courseId }: { courseId: string }) {

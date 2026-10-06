@@ -49,6 +49,33 @@ export function longDate(iso: ISODate) {
   return `${DAY_LONG[weekday(iso)]} ${d.getMonth() + 1}/${d.getDate()}`;
 }
 
+/** "10/7" */
+export function numericDate(iso: ISODate) {
+  const d = parseDate(iso);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** "October 2026" */
+export function monthYear(iso: ISODate) {
+  const d = parseDate(iso);
+  return `${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/** "Oct 12", "Oct 12 – 14", "Oct 30 – Nov 2" */
+export function dateSpan(start: ISODate, end: ISODate) {
+  if (start === end) return monthDay(start);
+  const a = parseDate(start);
+  const b = parseDate(end);
+  return a.getMonth() === b.getMonth() ? `${monthDay(start)} – ${b.getDate()}` : `${monthDay(start)} – ${monthDay(end)}`;
+}
+
+/** Whole days from a to b. */
+export function daysBetween(a: ISODate, b: ISODate) {
+  return Math.round((parseDate(b).getTime() - parseDate(a).getTime()) / 86_400_000);
+}
+
 /** "Oct 7" */
 export function monthDay(iso: ISODate) {
   const d = parseDate(iso);
