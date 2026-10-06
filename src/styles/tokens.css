@@ -1,0 +1,104 @@
+/*
+ * Design tokens — the only place raw color, type, spacing and radius values live.
+ * Source: Figma "LavaLab HW2 Design" local color + text styles, 4 px spacing scale.
+ */
+:root {
+  /* ---- Color styles (5) ---- */
+  --color-primary-background: #ffffff;
+  --color-secondary-background: #f7dbd0;
+  --color-primary-accent: #50252c;
+  --color-primary-text: #212121;
+  --color-secondary-text: #404040;
+
+  /* Opacity tints — no new hues, only steps of the five colors */
+  --color-accent-08: color-mix(in srgb, var(--color-primary-accent) 8%, transparent);
+  --color-accent-16: color-mix(in srgb, var(--color-primary-accent) 16%, transparent);
+  --color-accent-24: color-mix(in srgb, var(--color-primary-accent) 24%, transparent);
+  --color-accent-40: color-mix(in srgb, var(--color-primary-accent) 40%, transparent);
+  --color-text-08: color-mix(in srgb, var(--color-primary-text) 8%, transparent);
+  --color-text-shadow: color-mix(in srgb, var(--color-primary-text) 24%, transparent);
+
+  /* Availability scale: three opacity steps of Primary Accent (2, 3, everyone free) */
+  --color-availability-low: color-mix(in srgb, var(--color-primary-accent) 20%, var(--color-primary-background));
+  --color-availability-mid: color-mix(in srgb, var(--color-primary-accent) 50%, var(--color-primary-background));
+  --color-availability-full: var(--color-primary-accent);
+
+  /* ---- Type (Onest, 14 text styles) ---- */
+  --font-family: 'Onest', system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ---- Spacing scale (4 px system) ---- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+
+  /* ---- Component sizes (on the same grid) ---- */
+  --size-device: 402px;
+  --size-header: 160px;
+  --size-header-tall: 204px;
+  --size-nav: 108px;
+  --size-button: 40px;
+  --size-chip: 32px;
+  --size-search: 36px;
+  --size-icon-xs: 16px;
+  --size-icon-s: 24px;
+  --size-icon-m: 28px;
+  --size-icon-l: 40px;
+  --size-avatar-xs: 24px;
+  --size-avatar-s: 28px;
+  --size-avatar-m: 36px;
+  --size-avatar-l: 48px;
+  --size-avatar-xl: 60px;
+  --size-date-tile: 76px;
+  --size-course-tile: 64px;
+  --size-dot: 8px;
+  --size-calendar-hour: 40px;
+  --size-calendar-gutter: 24px;
+  --size-place-bar: 72px;
+
+  /* ---- Radius (read from the frames) ---- */
+  --radius-chip: 5px;
+  --radius-card: 6px;
+  --radius-button: 10px;
+  --radius-band: 10px;
+  --radius-full: 9999px;
+
+  /* ---- Elevation ---- */
+  --shadow-button: 0 1px 2px var(--color-text-08);
+  --shadow-toast: 0 0 4px var(--color-text-shadow);
+}
+
+/* Text styles. Names normalised from the Figma style names. */
+.display-xl        { font: var(--weight-semibold) 32px/1.2 var(--font-family); letter-spacing: -0.03em; }
+.display-l         { font: var(--weight-semibold) 28px/1.2 var(--font-family); letter-spacing: -0.025em; }
+.display-regular   { font: var(--weight-semibold) 24px/1.2 var(--font-family); letter-spacing: -0.02em; }
+.title-l           { font: var(--weight-medium) 20px/1.3 var(--font-family); letter-spacing: -0.015em; }
+.title-regular     { font: var(--weight-medium) 18px/1.3 var(--font-family); letter-spacing: -0.015em; }
+.title-s           { font: var(--weight-medium) 16px/1.3 var(--font-family); letter-spacing: -0.015em; }
+.body-regular      { font: var(--weight-regular) 16px/1.45 var(--font-family); letter-spacing: 0; }
+.body-s            { font: var(--weight-regular) 14px/1.45 var(--font-family); letter-spacing: 0; }
+.body-xs           { font: var(--weight-regular) 12px/1.45 var(--font-family); letter-spacing: 0; }
+.specials-label    { font: var(--weight-regular) 12px/1.4 var(--font-family); letter-spacing: 0.01em; }
+.specials-caption  { font: var(--weight-regular) 10px/1.4 var(--font-family); letter-spacing: 0.02em; }
+.clickables-regular{ font: var(--weight-semibold) 16px/1.2 var(--font-family); letter-spacing: -0.005em; }
+.clickables-s      { font: var(--weight-semibold) 14px/1.2 var(--font-family); letter-spacing: -0.005em; }
+.clickables-xs     { font: var(--weight-semibold) 12px/1.2 var(--font-family); letter-spacing: -0.005em; }
+
+/* Inline emphasis inside a body style (e.g. "Best time:", "Location:") */
+.emphasis { font-weight: var(--weight-semibold); }
+
+:root {
+  /* Surround outside the phone-width column on wide windows */
+  --color-surround: color-mix(in srgb, var(--color-secondary-background) 40%, var(--color-primary-background));
+  --radius-panel: 10px;
+  --stroke-hairline: 1px;
+  --stroke-bold: 2px;
+}
