@@ -42,6 +42,8 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   margin: 0 auto;
   background: var(--color-primary-background) var(--gradient-surface);
   padding-bottom: var(--size-nav);
+  /* Thumbnails grow on hover; never let that scroll the screen sideways */
+  overflow-x: clip;
 }
 
 .header-band {
@@ -54,14 +56,14 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
     linear-gradient(var(--color-scrim), var(--color-scrim)),
     var(--image-header) center / cover,
     var(--color-primary-accent);
-  color: var(--color-primary-background);
+  color: var(--color-on-scrim);
   border-radius: 0 0 var(--radius-band) var(--radius-band);
 }
-.header-band .back { color: var(--color-primary-background); }
+.header-band .back { color: var(--color-on-scrim); }
 .header-band .tabs__tab { color: var(--color-on-scrim-muted); }
-.header-band .tabs__tab--active { color: var(--color-primary-background); }
-.header-band .view-toggle__button { color: var(--color-primary-background); }
-.header-band .view-toggle__button--active { background: var(--color-primary-background); color: var(--color-primary-accent); }
+.header-band .tabs__tab--active { color: var(--color-on-scrim); }
+.header-band .view-toggle__button { color: var(--color-on-scrim); }
+.header-band .view-toggle__button--active { background: var(--color-on-scrim); color: var(--accent-1); }
 .header-band--tall { min-height: var(--size-header-tall); }
 
 .header-row {
@@ -121,19 +123,21 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   align-items: flex-start;
   justify-content: space-between;
   padding: var(--space-16) var(--space-32) var(--space-24);
-  background: var(--color-primary-background) var(--gradient-surface);
+  /* Nav component: accent/3 fill */
+  background: var(--accent-3);
   border-radius: var(--radius-band) var(--radius-band) 0 0;
 }
 .bottom-nav__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  /* Nav Bar Icon: 8 px between icon and label */
+  gap: var(--space-8);
   min-width: var(--size-avatar-l);
-  color: var(--color-primary-text);
+  color: var(--gray-12);
 }
-.bottom-nav__item--active { color: var(--color-primary-accent); }
-.bottom-nav__icon { display: flex; align-items: center; justify-content: center; height: var(--size-icon-l); }
+.bottom-nav__item--active { color: var(--accent-1); }
+.bottom-nav__icon { display: flex; align-items: center; justify-content: center; height: var(--size-nav-icon); }
 /* Same on-screen stroke for all nav icons, whatever each SVG's own scale is. */
 .bottom-nav__icon svg * { stroke-width: var(--stroke-nav-icon); vector-effect: non-scaling-stroke; }
 
@@ -148,14 +152,21 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   height: var(--size-button);
   padding: 0 var(--space-16);
   border-radius: var(--radius-button);
-  background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  /* Button component: component/button/{enabled,hover,pressed} */
+  background: var(--component-button-enabled);
+  color: var(--gray-1);
   box-shadow: var(--shadow-button);
   white-space: nowrap;
+  transition: background-color var(--duration-hover), color var(--duration-hover);
 }
+/* The Button component's hover/press variants fill with accent/2 and keep gray/1 text.
+   (The component/button/hover and /pressed variables still alias accent/3; the component wins.) */
+.button:hover:not(:disabled),
+.button:active:not(:disabled) { background: var(--accent-2); color: var(--gray-1); }
 .button--block { width: 100%; }
+/* Outline variant (Invite "+ Add"): hover/press use the same accent/2 fill */
 .button--outline {
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   color: var(--color-primary-accent);
   box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-primary-accent);
 }
@@ -177,12 +188,12 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   height: var(--size-chip);
   padding: 0 var(--space-20);
   border-radius: var(--radius-chip);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-card);
   color: var(--color-primary-text);
   white-space: nowrap;
 }
-.chip--selected { background: var(--color-primary-accent); color: var(--color-primary-background); }
+.chip--selected { background: var(--color-primary-accent); color: var(--color-on-accent); }
 .card .chip { box-shadow: none; }
 .card .chip:not(.chip--selected) { background: var(--color-secondary-background); }
 .chip--day { padding: 0; flex: 1 1 0; max-width: var(--size-icon-l); }
@@ -196,8 +207,9 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   height: var(--size-icon-s);
   padding: 0 var(--space-8);
   border-radius: var(--radius-full);
-  background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  /* Class Thumbnail badge: gray/12 fill, gray/1 text */
+  background: var(--gray-12);
+  color: var(--gray-1);
 }
 
 .tag {
@@ -207,7 +219,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   padding: 0 var(--space-16);
   border-radius: var(--radius-button);
   background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  color: var(--color-on-accent);
 }
 
 .dot {
@@ -239,11 +251,12 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  /* Search Field component: 8 px gap, 8 px left / 4 px right inset */
+  gap: var(--space-8);
   height: var(--size-search);
-  padding: 0 var(--space-12);
+  padding: 0 var(--space-4) 0 var(--space-8);
   border-radius: var(--radius-full);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-text-08);
   color: var(--color-primary-text);
 }
@@ -259,7 +272,8 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   appearance: none;
 }
 .search__input::placeholder { color: var(--color-secondary-text); opacity: 1; }
-.search:focus-within { box-shadow: inset 0 0 0 var(--stroke-bold) var(--color-primary-accent); }
+/* "selected" variant: 1 px accent/1 border */
+.search:focus-within { box-shadow: inset 0 0 0 var(--stroke-hairline) var(--accent-1); }
 
 .view-toggle { display: flex; gap: var(--space-8); }
 .view-toggle__button {
@@ -267,7 +281,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   border-radius: var(--radius-chip);
   color: var(--color-primary-text);
 }
-.view-toggle__button--active { background: var(--color-primary-accent); color: var(--color-primary-background); }
+.view-toggle__button--active { background: var(--color-primary-accent); color: var(--color-on-accent); }
 
 /* ----------------------------------------------------------------- Fields */
 
@@ -277,7 +291,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   padding: 0 var(--space-12);
   border: 0;
   border-radius: var(--radius-card);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-text-08);
   color: var(--color-primary-text);
   outline: none;
@@ -295,9 +309,9 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   justify-content: center;
   border-radius: var(--radius-full);
   background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  color: var(--color-on-accent);
 }
-.avatar--xs { width: var(--size-avatar-xs); height: var(--size-avatar-xs); box-shadow: 0 0 0 var(--stroke-hairline) var(--color-primary-background); }
+.avatar--xs { width: var(--size-avatar-xs); height: var(--size-avatar-xs); box-shadow: 0 0 0 var(--stroke-hairline) var(--color-surface); }
 .avatar--s { width: var(--size-avatar-s); height: var(--size-avatar-s); }
 .avatar--m { width: var(--size-avatar-m); height: var(--size-avatar-m); }
 .avatar--l { width: var(--size-avatar-l); height: var(--size-avatar-l); }
@@ -313,10 +327,19 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   width: 100%;
   padding: var(--space-12);
   border-radius: var(--radius-card);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-card);
   color: var(--color-primary-text);
 }
+/* Event and Class Thumbnail components: grow on hover and press */
+.thumbnail {
+  cursor: pointer;
+  transition: transform var(--duration-hover) ease-out;
+}
+.thumbnail:hover,
+.thumbnail:active { transform: scale(var(--scale-thumbnail-hover)); }
+/* Meta lines (times, places, people) use gray/11 */
+.meta { color: var(--color-secondary-text); }
 
 .tile {
   display: flex;
@@ -389,7 +412,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   gap: var(--space-8);
   padding: var(--space-12);
   border-radius: var(--radius-card);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-toast);
 }
 .toast__close { align-self: flex-end; display: flex; color: var(--color-primary-text); }
@@ -399,7 +422,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .week-calendar {
   padding: var(--space-8);
   border-radius: var(--radius-card);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
 .week-calendar__days,
@@ -418,7 +441,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   border-radius: var(--radius-chip);
   color: var(--color-primary-text);
 }
-.week-calendar__day--today { background: var(--color-primary-accent); color: var(--color-primary-background); }
+.week-calendar__day--today { background: var(--color-primary-accent); color: var(--color-on-accent); }
 .week-calendar__day--disabled { opacity: 0.4; }
 
 .week-calendar__scroll {
@@ -472,7 +495,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   z-index: 1;
   padding: 0 var(--space-4);
   background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  color: var(--color-on-accent);
 }
 .week-calendar__block--busy,
 .legend__swatch--busy {
@@ -489,7 +512,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .week-calendar__slot--mid,
 .legend__swatch--mid { background: var(--color-availability-mid); }
 .week-calendar__slot--full,
-.legend__swatch--full { background: var(--color-availability-full); color: var(--color-primary-background); }
+.legend__swatch--full { background: var(--color-availability-full); color: var(--color-on-accent); }
 .week-calendar__slot--selected {
   z-index: 2;
   box-shadow:
@@ -559,7 +582,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   gap: var(--space-12);
   height: var(--size-place-bar);
   padding: 0 var(--space-12);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
 }
 
 .map-preview {
@@ -576,13 +599,13 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   width: 100%;
   height: 100%;
   border-radius: var(--radius-full);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   color: var(--color-secondary-text);
   box-shadow: inset 0 0 0 var(--stroke-bold) var(--color-secondary-text);
 }
 .map-pin--selected {
   background: var(--color-primary-accent);
-  color: var(--color-primary-background);
+  color: var(--color-on-accent);
   box-shadow: none;
 }
 .map-pin svg { display: block; }
@@ -593,7 +616,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   transform: translateY(-50%);
   padding: var(--space-4) var(--space-12);
   border-radius: var(--radius-full);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   color: var(--color-primary-text);
   box-shadow: inset 0 0 0 var(--stroke-bold) var(--color-primary-accent);
   white-space: nowrap;
@@ -623,7 +646,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
   height: var(--size-device-height);
   overflow: hidden;
   border-radius: var(--radius-device-screen);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   /* Makes position: fixed children (bottom nav, toast) relative to the screen. */
   transform: translateZ(0);
 }
@@ -675,7 +698,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .date-picker {
   padding: var(--space-12);
   border-radius: var(--radius-card);
-  background: var(--color-primary-background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
 .date-picker__month {
@@ -720,7 +743,7 @@ button:focus-visible, .leaflet-marker-icon:focus-visible {
 .date-picker__day--today { box-shadow: inset 0 0 0 var(--stroke-hairline) var(--color-primary-accent); }
 .date-picker__day--in-range { border-radius: 0; background: var(--color-secondary-background); }
 .date-picker__day--selected,
-.date-picker__day--selected:hover:not(:disabled) { background: var(--color-primary-accent); color: var(--color-primary-background); }
+.date-picker__day--selected:hover:not(:disabled) { background: var(--color-primary-accent); color: var(--color-on-accent); }
 .date-picker__day--range-start { border-radius: var(--radius-full) 0 0 var(--radius-full); }
 .date-picker__day--range-end { border-radius: 0 var(--radius-full) var(--radius-full) 0; }
 

@@ -71,14 +71,14 @@ export function Classes() {
                 const unread = api.unreadChats(c.id);
                 const [dept, num] = c.code.split(' ');
                 return (
-                  <button key={c.id} type="button" className="card class-row" onClick={() => open(c.id)}>
+                  <button key={c.id} type="button" className="card thumbnail class-row" onClick={() => open(c.id)}>
                     <span className="tile tile--course title-s">
                       <span>{dept}</span>
                       <span>{num}</span>
                     </span>
                     <span className="class-row__text">
                       <span className="title-s">{c.name}</span>
-                      <span className="body-xs" aria-label={c.meetings.map((m) => `${DAY_SHORT[m.day]} ${rangeCompact(m.start, m.end)}`).join(', ')}>
+                      <span className="body-xs meta" aria-label={c.meetings.map((m) => `${DAY_SHORT[m.day]} ${rangeCompact(m.start, m.end)}`).join(', ')}>
                         {meetingSummary(c)}
                       </span>
                     </span>

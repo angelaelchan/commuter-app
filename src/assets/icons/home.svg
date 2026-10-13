@@ -1,3 +1,5 @@
-<svg overflow="visible" width="33.5" height="36.8333" viewBox="0 0 33.5 36.8333" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Icon" d="M11.75 35.0833V18.4167H21.75V35.0833M1.75 13.4167L16.75 1.75L31.75 13.4167V31.75C31.75 32.6341 31.3988 33.4819 30.7737 34.107C30.1486 34.7321 29.3007 35.0833 28.4167 35.0833H5.08333C4.19928 35.0833 3.35143 34.7321 2.72631 34.107C2.10119 33.4819 1.75 32.6341 1.75 31.75V13.4167Z" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg overflow="visible" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Home">
+<path id="Icon" d="M13.5 33V18H22.5V33M4.5 13.5L18 3L31.5 13.5V30C31.5 30.7957 31.1839 31.5587 30.6213 32.1213C30.0587 32.6839 29.2957 33 28.5 33H7.5C6.70435 33 5.94129 32.6839 5.37868 32.1213C4.81607 31.5587 4.5 30.7957 4.5 30V13.5Z" stroke="currentColor" stroke-width="3.15" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
 </svg>

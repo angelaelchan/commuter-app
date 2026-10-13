@@ -13,8 +13,8 @@ export function EventCard({ event, meta }: { event: AppEvent; meta: 'home' | 'fr
       ? `${dayShort(event.date)}, ${rangeShort(event.start, event.end)}`
       : `${rangeClock(event.start, event.end)} · ${event.place}`;
   return (
-    // Event detail has no wireframe yet: the card is not interactive.
-    <article className="card event-card" onClick={inactive}>
+    // Event Thumbnail component: grows on hover/press. Event detail has no wireframe yet, so tapping does nothing.
+    <article className="card thumbnail event-card" onClick={inactive}>
       <div className="tile title-s" aria-label={`${monthShort(event.date)} ${dayOfMonth(event.date)}`}>
         <span>{monthShort(event.date)}</span>
         <span>{dayOfMonth(event.date)}</span>
@@ -22,11 +22,11 @@ export function EventCard({ event, meta }: { event: AppEvent; meta: 'home' | 'fr
       <div className="event-card__body">
         <div className="event-card__text">
           <h3 className="title-s">{event.title}</h3>
-          <p className="body-xs">{line}</p>
+          <p className="body-xs meta">{line}</p>
         </div>
         <div className="event-card__people">
           <AvatarStack names={names} />
-          <span className="body-xs">{people}</span>
+          <span className="body-xs meta">{people}</span>
         </div>
       </div>
     </article>

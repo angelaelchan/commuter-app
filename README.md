@@ -23,7 +23,7 @@ Open the printed URL. The app is designed at 402 px wide. On a wider window it s
 
 | Path | What it is |
 | --- | --- |
-| `src/styles/tokens.css` | **All** design tokens: the 5 color styles and their opacity tints, the 14 Onest text styles, the 4 px spacing scale, sizes and radii |
+| `src/styles/tokens.css` | **All** design tokens: the Figma "HW 2" variables (gray 1–12, elevation, accent, button states; light mode only), the semantic roles mapped onto them, the 14 Onest text styles, the 4 px spacing scale, sizes and radii |
 | `src/styles/app.css` | Component and screen styles. Uses tokens only. |
 | `src/data/mock.ts` | Seed data: Audrey's classes, friends' weekly schedules, events, places (real coordinates), forum posts and chats |
 | `src/data/api.ts` | The single data layer. Screens read and write only through it, so a real backend can replace it later. |

@@ -20,7 +20,7 @@ export function PostCard({ post, showCourse, onOpen }: Props) {
       <div className="post__meta">
         <span className="post__author">
           <Avatar name={author} size="s" />
-          <span className="specials-label">
+          <span className="specials-label meta">
             {author} · {ago(post.minutesAgo)}
           </span>
         </span>
@@ -31,7 +31,7 @@ export function PostCard({ post, showCourse, onOpen }: Props) {
         <h3 className="title-s">{post.title}</h3>
         <p className="body-xs post__preview">{post.preview}</p>
       </div>
-      <p className="specials-label">
+      <p className="specials-label meta">
         {post.replies} {post.replies === 1 ? 'reply' : 'replies'} · {post.answered ? 'Answered' : 'Unanswered'}
       </p>
     </>

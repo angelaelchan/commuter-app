@@ -1,14 +1,50 @@
 /*
  * Design tokens — the only place raw color, type, spacing and radius values live.
- * Source: Figma "LavaLab HW2 Design" local color + text styles, 4 px spacing scale.
+ * Source: Figma "LavaLab HW2 Design": the "HW 2" variable collection (light mode
+ * only for now), local text styles, and the 4 px spacing scale.
  */
+
+/* ---- Figma variables: collection "HW 2", mode "light" (default) ---- */
 :root {
-  /* ---- Color styles (5) ---- */
-  --color-primary-background: #ffffff;
-  --color-secondary-background: #fededf;
-  --color-primary-accent: #50252c;
-  --color-primary-text: #212121;
-  --color-secondary-text: #404040;
+  --gray-1: #ffffff;
+  --gray-2: #f9f9f9;
+  --gray-3: #f0f0f0;
+  --gray-4: #e8e8e8;
+  --gray-5: #e0e0e0;
+  --gray-6: #d9d9d9;
+  --gray-7: #cecece;
+  --gray-8: #bbbbbb;
+  --gray-9: #8d8d8d;
+  --gray-10: #838383;
+  --gray-11: #646464;
+  --gray-12: #212121;
+
+  --base-elevation-100: var(--gray-1);
+  --base-elevation-200: var(--gray-3);
+  --base-elevation-300: var(--gray-5);
+
+  --accent-1: #50252c;
+  --accent-2: #74333e;
+  --accent-3: #fededf;
+
+  --component-button-enabled: var(--accent-1);
+  --component-button-hover: var(--accent-3);
+  --component-button-pressed: var(--accent-3);
+
+  /* Text on Primary Accent fills (avatars, badges, selected chips) */
+  --color-on-accent: var(--gray-1);
+}
+
+:root {
+  /* ---- Semantic roles, mapped onto the variables ---- */
+  --color-primary-background: var(--gray-1);
+  --color-secondary-background: var(--accent-3);
+  --color-primary-accent: var(--accent-1);
+  --color-primary-text: var(--gray-12);
+  --color-secondary-text: var(--gray-11);
+  /* Cards and thumbnails sit on the lowest elevation */
+  --color-surface: var(--base-elevation-100);
+  --color-surface-raised: var(--base-elevation-200);
 
   /* "Gradient" style: Primary Background → Secondary Background (page and nav surfaces) */
   --gradient-surface: linear-gradient(to bottom, var(--color-primary-background), var(--color-secondary-background));
@@ -16,7 +52,9 @@
   /* Header band: illustration under a 63% black scrim, white text on top */
   --image-header: url('../assets/images/header.jpg');
   --color-scrim: rgb(0 0 0 / 0.63);
-  --color-on-scrim-muted: color-mix(in srgb, var(--color-primary-background) 72%, transparent);
+  /* Text and controls on the dark scrim */
+  --color-on-scrim: #ffffff;
+  --color-on-scrim-muted: color-mix(in srgb, var(--color-on-scrim) 72%, transparent);
 
   /* Opacity tints — no new hues, only steps of the five colors */
   --color-accent-08: color-mix(in srgb, var(--color-primary-accent) 8%, transparent);
@@ -68,6 +106,8 @@
   --size-icon-s: 24px;
   --size-icon-m: 28px;
   --size-icon-l: 40px;
+  /* Nav Bar Icon: 36 px icon slot */
+  --size-nav-icon: 36px;
   --size-avatar-xs: 24px;
   --size-avatar-s: 28px;
   --size-avatar-m: 36px;
@@ -89,7 +129,11 @@
 
   /* ---- Elevation ---- */
   --shadow-button: 0 1px 2px var(--color-text-08);
-  --shadow-card: 0 0 2px rgb(0 0 0 / 0.2);
+  /* Event Thumbnail drop shadow: 4 px blur, 20% black */
+  --shadow-card: 0 0 4px rgb(0 0 0 / 0.2);
+  /* Hover/pressed thumbnails grow ~6% (357 → 378 px in the component) */
+  --scale-thumbnail-hover: 1.06;
+  --duration-hover: 120ms;
   --shadow-toast: 0 0 4px var(--color-text-shadow);
 }
 

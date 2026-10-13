@@ -105,7 +105,7 @@ export function Friends() {
                   <Avatar name={f.name} size="l" />
                   <span className="friend-row__text">
                     <span className="title-s">{f.name}</span>
-                    <span className="body-xs">{campusStatus(f)}</span>
+                    <span className="body-xs meta">{campusStatus(f)}</span>
                   </span>
                   <Button onClick={() => startHangout(f.id)} aria-label={`Invite ${f.name}`}>
                     Invite

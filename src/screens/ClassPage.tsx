@@ -66,7 +66,7 @@ function Chats({ courseId }: { courseId: string }) {
         <span className={`dot ${c.unread ? '' : 'dot--read'}`} aria-label={c.unread ? 'Unread' : undefined} />
         <Avatar name={name} size="xl" />
         <span className="chat-row__text">
-          <span className="specials-label">
+          <span className="specials-label meta">
             {name} · {c.time < 0 ? 'Yesterday' : clock(c.time)}
           </span>
           <span className="body-xs chat-row__message">{c.lastMessage}</span>
